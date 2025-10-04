@@ -1,128 +1,97 @@
 """
-Utility functions for Foxcode Shorter
-Helper functions for short code generation, password hashing, etc.
+Foxcode Shorter - Telegram Bot
+Main bot application with all handlers
+Created by: codewithkanchan.com
 """
 
-import string
-import random
-import hashlib
-import bcrypt
-import re
-from datetime import datetime, timedelta
-import qrcode
-import io
-import base64
-from urllib.parse import urlparse
+import logging
+import json
+import os
+import asyncio
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
+from telegram.constants import ParseMode
+import aiohttp
+import sys
 
-def generate_short_code(length=8):
-    """Generate random short code for URLs"""
-    characters = string.ascii_letters + string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
+# Configure logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-def hash_password(password: str) -> str:
-    """Hash password using bcrypt"""
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+# Import bot modules
+from handlers import (
+    start_handler, help_handler, shorten_handler, manage_handler,
+    wallet_handler, support_handler, callback_handler, url_handler,
+    terms_handler, stats_handler
+)
+from keyboards import get_main_keyboard, get_terms_keyboard
+from wallet import WalletManager
+from admin import AdminManager
 
-def verify_password(password: str, hashed: str) -> bool:
-    """Verify password against hash"""
-    return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+class FoxcodeShorterBot:
+    def __init__(self, token: str, api_base_url: str):
+        self.token = token
+        self.api_base_url = api_base_url
+        self.application = Application.builder().token(token).build()
+        self.wallet_manager = WalletManager(api_base_url)
+        self.admin_manager = AdminManager(api_base_url)
+        self.setup_handlers()
 
-def is_valid_url(url: str) -> bool:
-    """Validate URL format"""
-    try:
-        result = urlparse(url)
-        return all([result.scheme, result.netloc])
-    except:
-        return False
+    def setup_handlers(self):
+        """Setup all bot handlers"""
+        # Command handlers
+        self.application.add_handler(CommandHandler("start", start_handler))
+        self.application.add_handler(CommandHandler("help", help_handler))
+        self.application.add_handler(CommandHandler("shorten", shorten_handler))
+        self.application.add_handler(CommandHandler("manage", manage_handler))
+        self.application.add_handler(CommandHandler("wallet", wallet_handler))
+        self.application.add_handler(CommandHandler("support", support_handler))
+        self.application.add_handler(CommandHandler("terms", terms_handler))
+        self.application.add_handler(CommandHandler("stats", stats_handler))
 
-def clean_url(url: str) -> str:
-    """Clean and format URL"""
-    if not url.startswith(('http://', 'https://')):
-        url = 'https://' + url
-    return url
+        # Callback query handler for inline keyboards
+        self.application.add_handler(CallbackQueryHandler(callback_handler))
 
-def generate_qr_code(text: str) -> str:
-    """Generate QR code and return base64 string"""
-    try:
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(text)
-        qr.make(fit=True)
+        # URL message handler
+        self.application.add_handler(MessageHandler(
+            filters.TEXT & ~filters.COMMAND, url_handler
+        ))
 
-        img = qr.make_image(fill_color="black", back_color="white")
-        buffered = io.BytesIO()
-        img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
+        # Error handler
+        self.application.add_error_handler(self.error_handler)
 
-        return f"data:image/png;base64,{img_str}"
-    except Exception as e:
-        print(f"Error generating QR code: {e}")
-        return ""
+    async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """Handle errors"""
+        logger.error(msg="Exception while handling an update:", exc_info=context.error)
 
-def format_currency(amount: float) -> str:
-    """Format currency in Indian Rupees"""
-    return f"â‚¹{amount:.2f}"
+        if update and hasattr(update, 'effective_message'):
+            await update.effective_message.reply_text(
+                "âŒ An error occurred. Please try again later or contact support."
+            )
 
-def time_ago(dt: datetime) -> str:
-    """Get human-readable time difference"""
-    now = datetime.utcnow()
-    diff = now - dt
+    def run(self):
+        """Run the bot"""
+        logger.info("ðŸ¤– Starting Foxcode Shorter Bot...")
+        self.application.run_polling(allowed_updates=Update.ALL_TYPES)
 
-    if diff.days > 0:
-        return f"{diff.days} days ago"
-    elif diff.seconds > 3600:
-        hours = diff.seconds // 3600
-        return f"{hours} hours ago"
-    elif diff.seconds > 60:
-        minutes = diff.seconds // 60
-        return f"{minutes} minutes ago"
-    else:
-        return "Just now"
+# Load configuration
+try:
+    with open('../backend/config.json', 'r') as f:
+        config = json.load(f)
+except FileNotFoundError:
+    logger.error("âŒ config.json not found!")
+    sys.exit(1)
 
-def validate_telegram_id(telegram_id: str) -> bool:
-    """Validate Telegram ID format"""
-    return telegram_id.isdigit() and len(telegram_id) >= 9
+if __name__ == '__main__':
+    BOT_TOKEN = os.getenv('BOT_TOKEN', config['bot_token'])
+    API_BASE_URL = os.getenv('API_BASE_URL', 'http://localhost:8000')
 
-def sanitize_filename(filename: str) -> str:
-    """Sanitize filename for safe storage"""
-    return re.sub(r'[^a-zA-Z0-9._-]', '_', filename)
+    if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
+        logger.error("âŒ Please set your BOT_TOKEN in config.json or environment variables")
+        sys.exit(1)
 
-def generate_payment_reference() -> str:
-    """Generate unique payment reference"""
-    timestamp = str(int(datetime.utcnow().timestamp()))
-    random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    return f"FXC{timestamp}{random_part}"
-
-def calculate_expiry_date(days: int) -> datetime:
-    """Calculate expiry date from current date"""
-    return datetime.utcnow() + timedelta(days=days)
-
-def is_expired(expiry_date: datetime) -> bool:
-    """Check if date has expired"""
-    return datetime.utcnow() > expiry_date
-
-def format_file_size(size_bytes: int) -> str:
-    """Format file size in human readable format"""
-    if size_bytes == 0:
-        return "0B"
-
-    size_names = ["B", "KB", "MB", "GB"]
-    i = 0
-    while size_bytes >= 1024 and i < len(size_names) - 1:
-        size_bytes /= 1024.0
-        i += 1
-
-    return f"{size_bytes:.1f}{size_names[i]}"
-
-def create_payment_qr_data(upi_id: str, amount: float, name: str = "Foxcode Shorter") -> str:
-    """Create UPI payment QR code data"""
-    return f"upi://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR&tn=Payment for Foxcode Shorter"
-
-def log_activity(user_id: int, action: str, details: str = ""):
-    """Log user activity (can be extended to database logging)"""
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{timestamp}] User {user_id}: {action} {details}")
+    bot = FoxcodeShorterBot(BOT_TOKEN, API_BASE_URL)
+    bot.run()
