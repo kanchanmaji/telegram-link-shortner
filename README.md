@@ -1,12 +1,12 @@
-# Foxcode Shorter - AI Link Shortener SaaS Telegram Bot
+# Foxcode Shortener - AI Link Shortener SaaS Telegram Bot
 
-ðŸ”— **A complete SaaS solution for URL shortening with Telegram bot integration**
+🔗 **A complete SaaS solution for URL shortening with Telegram bot integration**
 
 Created by: [codewithkanchan.com](https://codewithkanchan.com)
 
-## ðŸŒŸ Features
+## 🌟 Features
 
-### ðŸ¤– Telegram Bot
+### 🤖 Telegram Bot
 - **Interactive Menu System** - Button-based navigation
 - **URL Shortening** - Convert long URLs to short branded links  
 - **Wallet System** - User balance management
@@ -16,7 +16,7 @@ Created by: [codewithkanchan.com](https://codewithkanchan.com)
 - **Click Analytics** - Track link performance
 - **Terms & Conditions** - User agreement system
 
-### ðŸš€ FastAPI Backend
+### 🚀 FastAPI Backend
 - **RESTful API** - Complete API for all operations
 - **SQLite Database** - Lightweight and fast
 - **JWT Authentication** - Secure API access
@@ -24,7 +24,7 @@ Created by: [codewithkanchan.com](https://codewithkanchan.com)
 - **Click Tracking** - Detailed analytics
 - **Auto Cleanup** - Expired links management
 
-### ðŸŽ›ï¸ Admin Panel (PHP)
+### 🎛️ Admin Panel (PHP)
 - **Dark Mode UI** - Modern Bootstrap 5 interface
 - **Dashboard** - Real-time statistics and overview
 - **User Management** - Manage users, balances, status
@@ -33,37 +33,37 @@ Created by: [codewithkanchan.com](https://codewithkanchan.com)
 - **Broadcast System** - Send messages to all users
 - **Domain Management** - Update custom domain settings
 
-## ðŸ—ï¸ Project Structure
+## 🏗️ Project Structure
 
 ```
 linkshortener-bot/
-â”œâ”€â”€ backend/                 # FastAPI Backend
-â”‚   â”œâ”€â”€ main.py             # Main FastAPI application
-â”‚   â”œâ”€â”€ models.py           # SQLAlchemy models
-â”‚   â”œâ”€â”€ database.py         # Database connection
-â”‚   â”œâ”€â”€ utils.py            # Utility functions
-â”‚   â””â”€â”€ config.json         # Configuration
-â”œâ”€â”€ bot/                    # Telegram Bot
-â”‚   â”œâ”€â”€ bot.py              # Main bot application
-â”‚   â”œâ”€â”€ handlers.py         # Message handlers
-â”‚   â”œâ”€â”€ keyboards.py        # Inline keyboards
-â”‚   â”œâ”€â”€ wallet.py           # Wallet management
-â”‚   â””â”€â”€ admin.py            # Admin functionality
-â”œâ”€â”€ admin_panel/            # PHP Admin Panel
-â”‚   â”œâ”€â”€ dashboard.php       # Main dashboard
-â”‚   â”œâ”€â”€ login.php           # Admin login
-â”‚   â”œâ”€â”€ users.php           # User management
-â”‚   â”œâ”€â”€ shortlinks.php      # Link management
-â”‚   â”œâ”€â”€ payments.php        # Payment processing
-â”‚   â”œâ”€â”€ broadcast.php       # Message broadcasting
-â”‚   â””â”€â”€ config.php          # PHP configuration
-â”œâ”€â”€ database.sql            # Database schema
-â”œâ”€â”€ requirements.txt        # Python dependencies
-â”œâ”€â”€ .env.example           # Environment variables template
-â””â”€â”€ README.md              # This file
+├── backend/                 # FastAPI Backend
+│   ├── main.py             # Main FastAPI application
+│   ├── models.py           # SQLAlchemy models
+│   ├── database.py         # Database connection
+│   ├── utils.py            # Utility functions
+│   └── config.json         # Configuration
+├── bot/                    # Telegram Bot
+│   ├── bot.py              # Main bot application
+│   ├── handlers.py         # Message handlers
+│   ├── keyboards.py        # Inline keyboards
+│   ├── wallet.py           # Wallet management
+│   └── admin.py            # Admin functionality
+├── admin_panel/            # PHP Admin Panel
+│   ├── dashboard.php       # Main dashboard
+│   ├── login.php           # Admin login
+│   ├── users.php           # User management
+│   ├── shortlinks.php      # Link management
+│   ├── payments.php        # Payment processing
+│   ├── broadcast.php       # Message broadcasting
+│   └── config.php          # PHP configuration
+├── database.sql            # Database schema
+├── requirements.txt        # Python dependencies
+├── .env.example           # Environment variables template
+└── README.md              # This file
 ```
 
-## âš™ï¸ Installation & Setup
+## ⚡ Installation & Setup
 
 ### 1. Prerequisites
 - Python 3.8+
@@ -76,8 +76,8 @@ linkshortener-bot/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/foxcode-shorter.git
-cd foxcode-shorter
+git clone https://github.com/kanchanmaji/telegram-link-shortener.git
+cd telegram-link-shortener
 
 # Create virtual environment
 python -m venv venv
@@ -141,7 +141,7 @@ chmod 644 /var/www/html/foxcode-admin/*.php
 # 4. Configure web server to redirect to FastAPI
 ```
 
-## ðŸ”§ Configuration
+## 🛠️ Configuration
 
 ### Environment Variables (.env)
 ```env
@@ -166,7 +166,7 @@ UPI_ID=your_upi_id@paytm
 - Set up database connection
 - Configure payment methods
 
-## ðŸ’³ Payment Integration
+## 💳 Payment Integration
 
 ### Manual Payments (Default)
 - Users send payment via UPI/Bank transfer
@@ -187,7 +187,7 @@ define('CASHFREE_CLIENT_ID', 'xxxxx');
 define('CASHFREE_CLIENT_SECRET', 'xxxxx');
 ```
 
-## ðŸ“Š API Documentation
+## 📚 API Documentation
 
 ### Authentication
 Most endpoints require authentication. Include bot token or JWT token in headers.
@@ -212,13 +212,13 @@ response = requests.post('http://localhost:8000/api/shortlinks', json={
 })
 ```
 
-## ðŸŽ¨ Customization
+## 🎨 Customization
 
 ### Bot Messages
 Edit messages in `bot/handlers.py`:
 ```python
 welcome_text = f"""
-ðŸŽ‰ Welcome to **Your Brand** - AI Link Shortener!
+🎉 Welcome to **Your Brand** - AI Link Shortener!
 ...
 """
 ```
@@ -232,7 +232,7 @@ Modify CSS in `admin_panel/assets/css/style.css` or update Bootstrap theme.
 3. Set up SSL certificate
 4. Configure reverse proxy
 
-## ðŸ”’ Security
+## 🔒 Security
 
 ### Best Practices
 - Change default admin credentials
@@ -252,7 +252,7 @@ sqlite3 foxcode_shorter.db ".backup backup_$(date +%Y%m%d).db"
 tail -f logs/app.log
 ```
 
-## ðŸš€ Deployment
+## 🚀 Deployment
 
 ### VPS Deployment
 ```bash
@@ -284,7 +284,7 @@ COPY backend/ .
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-## ðŸ“ˆ Monitoring
+## 📈 Monitoring
 
 ### Health Checks
 ```bash
@@ -310,7 +310,7 @@ tail -f logs/bot.log
 tail -f /var/log/nginx/access.log
 ```
 
-## ðŸ¤ Contributing
+## 🙏 Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
@@ -318,25 +318,25 @@ tail -f /var/log/nginx/access.log
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## ðŸ“ž Support
+## 📞 Support
 
-- **Email**: support@codewithkanchan.com
+- **Email**: codewithkanchan@gmail.com
 - **Telegram**: @codewithkanchan
 - **Website**: [codewithkanchan.com](https://codewithkanchan.com)
 - **Documentation**: [docs.codewithkanchan.com](https://docs.codewithkanchan.com)
 
-## ðŸ“ License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ðŸ™ Acknowledgments
+## 👏 Acknowledgments
 
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
 - [python-telegram-bot](https://python-telegram-bot.org/) - Telegram bot library
 - [Bootstrap](https://getbootstrap.com/) - Frontend framework
 - [SQLAlchemy](https://www.sqlalchemy.org/) - SQL toolkit and ORM
 
-## ðŸŽ¯ Roadmap
+## 🎯 Roadmap
 
 - [ ] Mobile app for link management
 - [ ] Advanced analytics dashboard  
@@ -351,6 +351,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with â¤ï¸ by [codewithkanchan.com](https://codewithkanchan.com)**
+**Made with ❤️ by [codewithkanchan.com](https://codewithkanchan.com)**
 
 > "Simplifying URL management, one short link at a time!"
