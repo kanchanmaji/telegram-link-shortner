@@ -1,0 +1,43 @@
+{
+  "app_name": "Foxcode Shorter",
+  "version": "1.0.0",
+  "custom_domain": "https://foxcode.tk",
+  "shortlink_cost": 10,
+  "bot_token": "YOUR_BOT_TOKEN_HERE",
+  "webhook_url": "https://your-api-domain.com/webhook",
+  "database_url": "sqlite:///./foxcode_shorter.db",
+  "admin_credentials": {
+    "username": "admin",
+    "password": "foxcode123"
+  },
+  "payment_methods": {
+    "razorpay": {
+      "enabled": true,
+      "key_id": "rzp_test_xxxxx",
+      "key_secret": "xxxxx"
+    },
+    "cashfree": {
+      "enabled": false,
+      "client_id": "xxxxx",
+      "client_secret": "xxxxx"
+    },
+    "manual_payment": {
+      "enabled": true,
+      "upi_id": "foxcode@paytm",
+      "qr_note": "Send payment screenshot after paying"
+    }
+  },
+  "features": {
+    "click_tracking": true,
+    "expiry_cleanup": true,
+    "telegram_inline": true,
+    "broadcast_system": true,
+    "dark_mode": true
+  },
+  "limits": {
+    "max_urls_per_user": 1000,
+    "max_url_length": 2000,
+    "short_code_length": 8,
+    "max_balance": 10000
+  }
+}
